@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projet Ménagerie — Tiago Gonçalves Dias</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #080c14;
+      --bg2: #0d1220;
+      --card: rgba(255,255,255,0.04);
+      --card-border: rgba(255,255,255,0.08);
+      --accent: #6c63ff;
+      --accent2: #00d2ff;
+      --accent3: #a855f7;
+      --text: #e8eaf6;
+      --muted: #8892a4;
+      --white: #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+
+    .bg-glow {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 20%, rgba(108,99,255,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 80% 80%, rgba(0,210,255,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 60% 10%, rgba(168,85,247,0.07) 0%, transparent 70%);
+    }
+
+    /* ─── Nav ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 6%;
+      backdrop-filter: blur(20px);
+      background: rgba(8,12,20,0.7);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .nav-logo {
+      font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.3rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+    .nav-back {
+      color: var(--muted); font-size: 0.9rem; font-weight: 500;
+      text-decoration: none; transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--white); }
+
+    /* ─── Hero ─── */
+    .hero {
+      position: relative; z-index: 1;
+      padding: 9rem 6% 5rem;
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 3rem; align-items: center;
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(108,99,255,0.12); border: 1px solid rgba(108,99,255,0.3);
+      color: var(--accent); font-size: 0.8rem; font-weight: 600;
+      padding: 0.4rem 1rem; border-radius: 100px;
+      margin-bottom: 1.5rem; letter-spacing: 0.05em;
+    }
+    .hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; line-height: 1.15;
+      background: linear-gradient(135deg, var(--white) 0%, var(--accent2) 50%, var(--accent) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+    .hero-sub { color: var(--muted); font-size: 1rem; line-height: 1.7; max-width: 540px; margin-bottom: 2rem; }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.8rem 1.8rem; border-radius: 12px;
+      font-size: 0.88rem; font-weight: 600; text-decoration: none; transition: all 0.25s;
+    }
+    .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent3)); color: #fff; box-shadow: 0 0 25px rgba(108,99,255,0.3); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(108,99,255,0.5); }
+    .btn-outline { border: 1px solid var(--card-border); color: var(--text); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+    /* Hero tech badges */
+    .hero-badges { display: flex; flex-direction: column; gap: 0.8rem; }
+    .badge {
+      background: var(--card); border: 1px solid var(--card-border);
+      border-radius: 12px; padding: 0.8rem 1.2rem;
+      display: flex; align-items: center; gap: 0.7rem;
+      font-size: 0.85rem; font-weight: 600; color: var(--text);
+      white-space: nowrap;
+      animation: floatIn 0.6s ease forwards; opacity: 0;
+    }
+    .badge:nth-child(1) { animation-delay: 0.1s; }
+    .badge:nth-child(2) { animation-delay: 0.2s; }
+    .badge:nth-child(3) { animation-delay: 0.3s; }
+    .badge:nth-child(4) { animation-delay: 0.4s; }
+    @keyframes floatIn { to { opacity: 1; } }
+    .badge-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+    /* ─── Sections ─── */
+    section { position: relative; z-index: 1; padding: 5rem 6%; }
+    .section-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
+    .section-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.6rem, 3vw, 2.3rem); font-weight: 700; color: var(--white); margin-bottom: 0.8rem; }
+    .section-sub { color: var(--muted); font-size: 0.95rem; line-height: 1.7; max-width: 540px; margin-bottom: 2.5rem; }
+    .divider { width: 40px; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 2px; margin-bottom: 2.5rem; }
+
+    /* ─── Overview ─── */
+    #overview { background: var(--bg2); }
+    .overview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+
+    /* Architecture list */
+    .arch-list { display: flex; flex-direction: column; gap: 0.8rem; }
+    .arch-item {
+      background: var(--card); border: 1px solid var(--card-border);
+      border-radius: 14px; padding: 1rem 1.2rem;
+      display: flex; align-items: center; gap: 1rem;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .arch-item:hover { border-color: rgba(108,99,255,0.4); transform: translateX(4px); }
+    .arch-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+    }
+    .ai-blue   { background: rgba(74,144,226,0.15); }
+    .ai-green  { background: rgba(52,211,153,0.15); }
+    .ai-purple { background: rgba(168,85,247,0.15); }
+    .ai-orange { background: rgba(251,146,60,0.15); }
+    .ai-red    { background: rgba(248,113,113,0.15); }
+    .ai-cyan   { background: rgba(0,210,255,0.15); }
+    .arch-info h4 { font-size: 0.9rem; font-weight: 700; color: var(--white); margin-bottom: 0.15rem; }
+    .arch-info p  { font-size: 0.78rem; color: var(--muted); }
+
+    /* ─── Features ─── */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.2rem; }
+    .feature-card {
+      background: var(--card); border: 1px solid var(--card-border);
+      border-radius: 18px; padding: 1.6rem;
+      transition: all 0.3s;
+      opacity: 0; transform: translateY(20px);
+      animation: fadeUp 0.5s ease forwards;
+    }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    .feature-card:hover { border-color: rgba(108,99,255,0.4); transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.3); }
+    .feature-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .feature-title { font-size: 0.95rem; font-weight: 700; color: var(--white); margin-bottom: 0.5rem; }
+    .feature-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.6; }
+
+    /* ─── Code ─── */
+    #code { background: var(--bg2); }
+    .code-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .code-block {
+      background: #0a0e1a; border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px; overflow: hidden;
+    }
+    .code-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.9rem 1.2rem;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .code-dots { display: flex; gap: 6px; }
+    .code-dots span { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-red    { background: #ff5f57; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green  { background: #28ca41; }
+    .code-filename { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--muted); }
+    .code-body { padding: 1.4rem; overflow-x: auto; }
+    pre { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; line-height: 1.7; color: #c9d1d9; }
+    .kw  { color: #ff7b72; }   /* keywords */
+    .typ { color: #79c0ff; }   /* types */
+    .str { color: #a5d6ff; }   /* strings */
+    .cmt { color: #8b949e; font-style: italic; }  /* comments */
+    .fn  { color: #d2a8ff; }   /* functions */
+    .num { color: #f2cc60; }   /* numbers */
+
+    /* ─── Download ─── */
+    #download { text-align: center; }
+    .dl-card {
+      display: inline-flex; flex-direction: column; align-items: center;
+      background: linear-gradient(135deg, rgba(108,99,255,0.12), rgba(0,210,255,0.06));
+      border: 1px solid rgba(108,99,255,0.25);
+      border-radius: 24px; padding: 3rem; max-width: 560px; width: 100%;
+    }
+    .dl-icon { font-size: 3rem; margin-bottom: 1.2rem; }
+    .dl-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--white); margin-bottom: 0.6rem; }
+    .dl-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.8rem; line-height: 1.6; }
+    .cmd-block {
+      width: 100%; background: #0a0e1a; border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px; padding: 1.2rem 1.4rem; margin-bottom: 1.8rem;
+      text-align: left;
+    }
+    .cmd-block pre { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: #c9d1d9; line-height: 1.8; }
+
+    /* ─── Footer ─── */
+    footer {
+      position: relative; z-index: 1;
+      text-align: center; padding: 2rem;
+      border-top: 1px solid var(--card-border);
+      color: var(--muted); font-size: 0.8rem;
+    }
+
+    /* ─── Reveal ─── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-badges { flex-direction: row; flex-wrap: wrap; }
+      .badge { white-space: normal; }
+      .overview-grid { grid-template-columns: 1fr; }
+      .code-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <a href="index.html" class="nav-logo">TGD</a>
+  <a href="index.html#projects" class="nav-back">← Retour au portfolio</a>
+</nav>
+
+<!-- ─── HERO ─── -->
+<div class="hero">
+  <div>
+    <div class="hero-tag">Projet académique — BTS SIO SLAM 2024–2026</div>
+    <h1 class="hero-title">Projet Ménagerie</h1>
+    <p class="hero-sub">
+      Application de bureau développée en Java avec interface graphique Swing. Gestion complète d'une ménagerie : ajout, recherche et suppression d'animaux. Architecture orientée objet.
+    </p>
+    <div class="hero-btns">
+      <a href="#code" class="btn btn-primary">Voir le code source</a>
+      <a href="#features" class="btn btn-outline">Fonctionnalités</a>
+    </div>
+  </div>
+  <div class="hero-badges">
+    <div class="badge"><span class="badge-dot" style="background:#ff5f57"></span>Java 17</div>
+    <div class="badge"><span class="badge-dot" style="background:#6c63ff"></span>Java Swing</div>
+    <div class="badge"><span class="badge-dot" style="background:#00d2ff"></span>Architecture MVC</div>
+    <div class="badge"><span class="badge-dot" style="background:#a855f7"></span>POO</div>
+  </div>
+</div>
+
+<!-- ─── DESCRIPTION ─── -->
+<section id="overview">
+  <div class="section-label">Le projet</div>
+  <div class="section-title">Ménagerie Java</div>
+  <div class="divider"></div>
+  <p class="section-sub">
+    Application développée en Java dans le cadre de ma formation BTS SIO. Elle permet d'ajouter, rechercher et supprimer des animaux via une interface graphique simple.
+  </p>
+  <div class="features-grid">
+    <div class="feature-card" style="animation-delay:0.05s">
+      <div class="feature-icon">➕</div>
+      <div class="feature-title">Ajouter un animal</div>
+      <div class="feature-desc">On saisit le nom et l'espèce, puis l'animal est enregistré dans la liste.</div>
+    </div>
+    <div class="feature-card" style="animation-delay:0.1s">
+      <div class="feature-icon">🔍</div>
+      <div class="feature-title">Rechercher</div>
+      <div class="feature-desc">On peut retrouver un animal par son nom dans la liste.</div>
+    </div>
+    <div class="feature-card" style="animation-delay:0.15s">
+      <div class="feature-icon">🗑️</div>
+      <div class="feature-title">Supprimer</div>
+      <div class="feature-desc">On supprime un animal de la liste après confirmation.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CODE ─── -->
+<section id="code">
+  <div class="section-label">Code Source</div>
+  <div class="section-title">Extraits du projet</div>
+  <div class="divider"></div>
+  <div class="code-grid">
+
+    <!-- Animal.java -->
+    <div class="code-block reveal">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+        <span class="code-filename">Animal.java</span>
+      </div>
+      <div class="code-body">
+<pre><span class="kw">public class</span> <span class="typ">Animal</span> {
+    <span class="kw">private</span> <span class="typ">String</span> nom;
+    <span class="kw">private</span> <span class="typ">String</span> espece;
+
+    <span class="kw">public</span> <span class="fn">Animal</span>(<span class="typ">String</span> nom, <span class="typ">String</span> espece) {
+        <span class="kw">this</span>.nom = nom;
+        <span class="kw">this</span>.espece = espece;
+    }
+
+    <span class="kw">public</span> <span class="typ">String</span> <span class="fn">getNom</span>() {
+        <span class="kw">return</span> nom;
+    }
+
+    <span class="kw">public</span> <span class="typ">String</span> <span class="fn">getEspece</span>() {
+        <span class="kw">return</span> espece;
+    }
+}</pre>
+      </div>
+    </div>
+
+    <!-- Menagerie.java -->
+    <div class="code-block reveal reveal-delay-1">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+        <span class="code-filename">Menagerie.java</span>
+      </div>
+      <div class="code-body">
+<pre><span class="kw">import</span> java.util.ArrayList;
+
+<span class="kw">public class</span> <span class="typ">Menagerie</span> {
+    <span class="typ">ArrayList</span>&lt;<span class="typ">Animal</span>&gt; listeAnimaux;
+
+    <span class="kw">public</span> <span class="fn">Menagerie</span>() {
+        <span class="kw">this</span>.listeAnimaux = <span class="kw">new</span> <span class="typ">ArrayList</span>&lt;<span class="typ">Animal</span>&gt;();
+    }
+
+    <span class="kw">public void</span> <span class="fn">ajouterUnAnimal</span>(<span class="typ">Animal</span> unAnimal) {
+        <span class="kw">this</span>.listeAnimaux.add(unAnimal);
+    }
+
+    <span class="kw">public void</span> <span class="fn">retirerUnAnimal</span>(<span class="typ">Animal</span> unAnimal) {
+        <span class="kw">this</span>.listeAnimaux.remove(unAnimal);
+    }
+
+    <span class="kw">public int</span> <span class="fn">rechercherAnimal</span>(<span class="typ">String</span> unNom) {
+        <span class="kw">if</span> (listeAnimaux.size() == <span class="num">0</span>) <span class="kw">return</span> -<span class="num">1</span>;
+        <span class="kw">int</span> compteur = <span class="num">0</span>;
+        <span class="kw">while</span> (compteur &lt; listeAnimaux.size() &amp;&amp;
+               !listeAnimaux.get(compteur).getNom().equals(unNom)) {
+            compteur++;
+        }
+        <span class="kw">return</span> (compteur &lt; listeAnimaux.size()) ? compteur : -<span class="num">1</span>;
+    }
+}</pre>
+      </div>
+    </div>
+
+    <!-- MenuFenetre.java -->
+    <div class="code-block reveal reveal-delay-2">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+        <span class="code-filename">MenuFenetre.java</span>
+      </div>
+      <div class="code-body">
+<pre><span class="kw">import</span> javax.swing.*;
+<span class="kw">import</span> java.awt.event.*;
+
+<span class="kw">public class</span> <span class="typ">MenuFenetre</span> <span class="kw">extends</span> <span class="typ">JFrame</span>
+                          <span class="kw">implements</span> <span class="typ">ActionListener</span> {
+
+    <span class="kw">private</span> <span class="typ">JButton</span> btnAjouter, btnRechercher, btnSupprimer;
+
+    <span class="kw">public</span> <span class="fn">MenuFenetre</span>() {
+        <span class="kw">this</span>.<span class="fn">setTitle</span>(<span class="str">"Ménagerie - Menu"</span>);
+        <span class="kw">this</span>.<span class="fn">setSize</span>(<span class="num">400</span>, <span class="num">150</span>);
+        <span class="kw">this</span>.<span class="fn">setLocationRelativeTo</span>(<span class="kw">null</span>);
+        btnAjouter   = <span class="kw">new</span> <span class="typ">JButton</span>(<span class="str">"Ajouter un animal"</span>);
+        btnRechercher = <span class="kw">new</span> <span class="typ">JButton</span>(<span class="str">"Rechercher un animal"</span>);
+        btnSupprimer = <span class="kw">new</span> <span class="typ">JButton</span>(<span class="str">"Supprimer un animal"</span>);
+        <span class="cmt">// ... ajout des listeners et du panel</span>
+    }
+
+    <span class="kw">public void</span> <span class="fn">actionPerformed</span>(<span class="typ">ActionEvent</span> e) {
+        <span class="kw">if</span>      (e.<span class="fn">getSource</span>() == btnAjouter)    <span class="kw">new</span> <span class="fn">AjoutAnimalFenetre</span>();
+        <span class="kw">else if</span> (e.<span class="fn">getSource</span>() == btnRechercher) <span class="kw">new</span> <span class="fn">RechercheAnimalFenetre</span>();
+        <span class="kw">else if</span> (e.<span class="fn">getSource</span>() == btnSupprimer)  <span class="kw">new</span> <span class="fn">SuppressionAnimalFenetre</span>();
+    }
+}</pre>
+      </div>
+    </div>
+
+    <!-- AjoutAnimalFenetre.java -->
+    <div class="code-block reveal reveal-delay-3">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+        <span class="code-filename">AjoutAnimalFenetre.java</span>
+      </div>
+      <div class="code-body">
+<pre><span class="kw">public class</span> <span class="typ">AjoutAnimalFenetre</span> <span class="kw">extends</span> <span class="typ">JFrame</span>
+                                  <span class="kw">implements</span> <span class="typ">ActionListener</span> {
+
+    <span class="kw">private</span> <span class="typ">JTextField</span> jtfNom, jtfEspece;
+    <span class="kw">private</span> <span class="typ">JButton</span>    btnValider;
+
+    <span class="kw">public void</span> <span class="fn">actionPerformed</span>(<span class="typ">ActionEvent</span> e) {
+        <span class="kw">if</span> (e.<span class="fn">getSource</span>() == btnValider) {
+            <span class="typ">String</span> nom    = jtfNom.<span class="fn">getText</span>();
+            <span class="typ">String</span> espece = jtfEspece.<span class="fn">getText</span>();
+            <span class="typ">Animal</span> nouvelAnimal = <span class="kw">new</span> <span class="fn">Animal</span>(nom, espece);
+            <span class="typ">Programme</span>.maMenagerie.<span class="fn">ajouterUnAnimal</span>(nouvelAnimal);
+            <span class="typ">JOptionPane</span>.<span class="fn">showMessageDialog</span>(<span class="kw">this</span>,
+                <span class="str">"Animal ajouté avec succès !"</span>);
+            <span class="kw">this</span>.<span class="fn">dispose</span>();
+        }
+    }
+}</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── DOWNLOAD ─── -->
+<section id="download">
+  <div class="section-label">Téléchargement</div>
+  <div class="section-title">Obtenir le projet</div>
+  <div class="divider" style="margin:0 auto 2.5rem;"></div>
+  <div style="display:flex;justify-content:center;">
+    <div class="dl-card reveal">
+      <div class="dl-icon">📦</div>
+      <div class="dl-title">Code source Java</div>
+      <div class="dl-sub">6 fichiers .java — compilable avec javac<br>Testé sur Java 17 avec Eclipse IDE</div>
+      <div class="cmd-block">
+        <pre><span style="color:#8b949e"># Compilation</span>
+javac *.java
+
+<span style="color:#8b949e"># Exécution</span>
+java Programme</pre>
+      </div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;">
+        <a href="projet_menagerie/Programme.java" class="btn btn-primary">⬇ Télécharger les sources</a>
+        <a href="projet_menagerie/README.md" class="btn btn-outline">📄 README</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <p>© 2025 Tiago Gonçalves Dias — Projet Ménagerie Java</p>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

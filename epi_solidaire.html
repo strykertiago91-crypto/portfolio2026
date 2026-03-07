@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Epi-Solidaire — Tiago Gonçalves Dias</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #080c14;
+      --bg2: #0d1220;
+      --card: rgba(255,255,255,0.04);
+      --card-border: rgba(255,255,255,0.08);
+      --accent: #6c63ff;
+      --accent2: #00d2ff;
+      --accent3: #a855f7;
+      --green: #34d399;
+      --text: #e8eaf6;
+      --muted: #8892a4;
+      --white: #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+
+    .bg-glow {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 20%, rgba(52,211,153,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 80% 80%, rgba(0,210,255,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 60% 10%, rgba(108,99,255,0.07) 0%, transparent 70%);
+    }
+
+    /* ─── Nav ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 6%;
+      backdrop-filter: blur(20px);
+      background: rgba(8,12,20,0.7);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .nav-logo {
+      font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.3rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+    .nav-back { color: var(--muted); font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s; }
+    .nav-back:hover { color: var(--white); }
+
+    /* ─── Hero ─── */
+    .hero {
+      position: relative; z-index: 1;
+      padding: 9rem 6% 5rem;
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 3rem; align-items: center;
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.3);
+      color: var(--green); font-size: 0.8rem; font-weight: 600;
+      padding: 0.4rem 1rem; border-radius: 100px;
+      margin-bottom: 1.5rem; letter-spacing: 0.05em;
+    }
+    .hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; line-height: 1.15;
+      background: linear-gradient(135deg, var(--white) 0%, var(--green) 60%, var(--accent2) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+    .hero-sub { color: var(--muted); font-size: 1rem; line-height: 1.7; max-width: 540px; margin-bottom: 2rem; }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.8rem 1.8rem; border-radius: 12px;
+      font-size: 0.88rem; font-weight: 600; text-decoration: none; transition: all 0.25s;
+    }
+    .btn-primary { background: linear-gradient(135deg, var(--green), var(--accent2)); color: #000; font-weight: 700; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(52,211,153,0.4); }
+    .btn-outline { border: 1px solid var(--card-border); color: var(--text); }
+    .btn-outline:hover { border-color: var(--green); color: var(--green); transform: translateY(-2px); }
+
+    .hero-badges { display: flex; flex-direction: column; gap: 0.8rem; }
+    .badge {
+      background: var(--card); border: 1px solid var(--card-border);
+      border-radius: 12px; padding: 0.8rem 1.2rem;
+      display: flex; align-items: center; gap: 0.7rem;
+      font-size: 0.85rem; font-weight: 600; color: var(--text);
+      white-space: nowrap;
+      opacity: 0; animation: fadeIn 0.5s ease forwards;
+    }
+    .badge:nth-child(1){animation-delay:0.1s} .badge:nth-child(2){animation-delay:0.2s}
+    .badge:nth-child(3){animation-delay:0.3s} .badge:nth-child(4){animation-delay:0.4s}
+    .badge:nth-child(5){animation-delay:0.5s}
+    @keyframes fadeIn { to { opacity: 1; } }
+    .bdot { width: 8px; height: 8px; border-radius: 50%; }
+
+    /* ─── Sections ─── */
+    section { position: relative; z-index: 1; padding: 5rem 6%; }
+    .section-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--green); margin-bottom: 0.6rem; }
+    .section-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.6rem, 3vw, 2.3rem); font-weight: 700; color: var(--white); margin-bottom: 0.8rem; }
+    .section-sub { color: var(--muted); font-size: 0.95rem; line-height: 1.7; max-width: 600px; margin-bottom: 2.5rem; }
+    .divider { width: 40px; height: 3px; background: linear-gradient(90deg, var(--green), var(--accent2)); border-radius: 2px; margin-bottom: 2.5rem; }
+
+    /* ─── Overview ─── */
+    #overview { background: var(--bg2); }
+    .overview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+
+    /* ─── Context card ─── */
+    .context-card {
+      background: linear-gradient(135deg, rgba(52,211,153,0.08), rgba(0,210,255,0.05));
+      border: 1px solid rgba(52,211,153,0.2); border-radius: 20px; padding: 1.8rem;
+      margin-bottom: 1.5rem;
+    }
+    .context-card h4 { font-size: 0.85rem; font-weight: 700; color: var(--green); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.7rem; }
+    .context-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+
+    /* ─── Architecture ─── */
+    .arch-list { display: flex; flex-direction: column; gap: 0.7rem; }
+    .arch-item {
+      background: var(--card); border: 1px solid var(--card-border);
+      border-radius: 14px; padding: 0.9rem 1.1rem;
+      display: flex; align-items: center; gap: 0.9rem;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .arch-item:hover { border-color: rgba(52,211,153,0.35); transform: translateX(4px); }
+    .arch-icon { width: 36px; height: 36px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+    .ai-green  { background: rgba(52,211,153,0.12); }
+    .ai-blue   { background: rgba(0,210,255,0.12); }
+    .ai-purple { background: rgba(168,85,247,0.12); }
+    .ai-orange { background: rgba(251,146,60,0.12); }
+    .arch-info h4 { font-size: 0.88rem; font-weight: 700; color: var(--white); margin-bottom: 0.1rem; }
+    .arch-info p  { font-size: 0.75rem; color: var(--muted); }
+
+    /* ─── Roles ─── */
+    .roles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+    .role-card {
+      background: var(--card); border: 1px solid var(--card-border);
+      border-radius: 16px; padding: 1.4rem;
+      transition: all 0.3s;
+      opacity: 0; transform: translateY(20px);
+      animation: fadeUp 0.5s ease forwards;
+    }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    .role-card:hover { border-color: rgba(52,211,153,0.35); transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+    .role-icon { font-size: 1.8rem; margin-bottom: 0.8rem; }
+    .role-name { font-size: 0.9rem; font-weight: 700; color: var(--green); margin-bottom: 0.4rem; }
+    .role-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+    .role-perms { margin-top: 0.8rem; display: flex; flex-direction: column; gap: 0.3rem; }
+    .perm { font-size: 0.75rem; color: var(--muted); display: flex; align-items: center; gap: 0.4rem; }
+    .perm::before { content: '✓'; color: var(--green); font-weight: 700; }
+
+    /* ─── Features ─── */
+    #features { background: var(--bg2); }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.2rem; }
+    .feature-card {
+      background: var(--card); border: 1px solid var(--card-border);
+      border-radius: 18px; padding: 1.5rem; transition: all 0.3s;
+      opacity: 0; transform: translateY(20px); animation: fadeUp 0.5s ease forwards;
+    }
+    .feature-card:hover { border-color: rgba(52,211,153,0.35); transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.3); }
+    .feature-icon { font-size: 1.8rem; margin-bottom: 0.9rem; }
+    .feature-title { font-size: 0.92rem; font-weight: 700; color: var(--white); margin-bottom: 0.4rem; }
+    .feature-desc  { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+    /* ─── Database ─── */
+    .db-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.8rem; }
+    .db-table {
+      background: var(--card); border: 1px solid var(--card-border);
+      border-radius: 12px; padding: 1rem;
+      transition: all 0.25s;
+    }
+    .db-table:hover { border-color: rgba(52,211,153,0.35); }
+    .db-name { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; font-weight: 600; color: var(--green); margin-bottom: 0.5rem; }
+    .db-cols { list-style: none; display: flex; flex-direction: column; gap: 0.2rem; }
+    .db-cols li { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--muted); }
+    .db-cols .pk { color: var(--accent2); }
+    .db-cols .fk { color: var(--accent3); }
+
+    /* ─── Code ─── */
+    #code { background: var(--bg2); }
+    .code-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .code-block { background: #0a0e1a; border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; overflow: hidden; }
+    .code-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.9rem 1.2rem; background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .code-dots { display: flex; gap: 6px; }
+    .code-dots span { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r{background:#ff5f57} .dot-y{background:#ffbd2e} .dot-g{background:#28ca41}
+    .code-filename { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--muted); }
+    .code-body { padding: 1.3rem; overflow-x: auto; }
+    pre { font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; line-height: 1.75; color: #c9d1d9; }
+    .kw  { color: #ff7b72; }
+    .typ { color: #79c0ff; }
+    .str { color: #a5d6ff; }
+    .cmt { color: #8b949e; font-style: italic; }
+    .fn  { color: #d2a8ff; }
+    .num { color: #f2cc60; }
+    .var { color: #ffa657; }
+
+    /* ─── Reveal ─── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.1s; } .reveal-d2 { transition-delay: 0.2s; } .reveal-d3 { transition-delay: 0.3s; }
+
+    /* ─── Footer ─── */
+    footer { position: relative; z-index: 1; text-align: center; padding: 2rem; border-top: 1px solid var(--card-border); color: var(--muted); font-size: 0.8rem; }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-badges { flex-direction: row; flex-wrap: wrap; }
+      .overview-grid { grid-template-columns: 1fr; }
+      .code-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <a href="index.html" class="nav-logo">TGD</a>
+  <a href="index.html#projects" class="nav-back">← Retour au portfolio</a>
+</nav>
+
+<!-- ─── HERO ─── -->
+<div class="hero">
+  <div>
+    <div class="hero-tag">BTS SIO SLAM 2024–2026</div>
+    <h1 class="hero-title">Epi-Solidaire</h1>
+    <p class="hero-sub">
+      Application web de gestion d'une épicerie solidaire pour la commune fictive de Getcet-sur-Mer. Développée en PHP avec architecture MVC, base de données MySQL et système d'authentification par rôle.
+    </p>
+    <div class="hero-btns">
+      <a href="#overview" class="btn btn-primary">Voir l'architecture</a>
+      <a href="#code" class="btn btn-outline">Code source</a>
+    </div>
+  </div>
+  <div class="hero-badges">
+    <div class="badge"><span class="bdot" style="background:#34d399"></span>PHP 8</div>
+    <div class="badge"><span class="bdot" style="background:#00d2ff"></span>MySQL / PDO</div>
+    <div class="badge"><span class="bdot" style="background:#6c63ff"></span>Architecture MVC</div>
+    <div class="badge"><span class="bdot" style="background:#a855f7"></span>Sessions PHP</div>
+    <div class="badge"><span class="bdot" style="background:#fb923c"></span>HTML / CSS</div>
+  </div>
+</div>
+
+<!-- ─── DESCRIPTION ─── -->
+<section id="overview">
+  <div class="section-label">Le projet</div>
+  <div class="section-title">Epi-Solidaire</div>
+  <div class="divider"></div>
+  <p class="section-sub" style="margin-bottom:2.5rem;">
+    Application web développée en PHP permettant de gérer une épicerie solidaire. Les employés se connectent avec leur compte et accèdent aux fonctionnalités selon leur rôle.
+  </p>
+  <div class="features-grid" style="margin-bottom:0;">
+    <div class="feature-card" style="animation-delay:0.05s">
+      <div class="feature-icon">🔑</div>
+      <div class="feature-title">Connexion</div>
+      <div class="feature-desc">Chaque employé se connecte avec son identifiant. L'accès aux pages dépend de son rôle.</div>
+    </div>
+    <div class="feature-card" style="animation-delay:0.1s">
+      <div class="feature-icon">🏪</div>
+      <div class="feature-title">Gestion des commerces</div>
+      <div class="feature-desc">Consulter, ajouter ou supprimer les commerces partenaires de l'épicerie.</div>
+    </div>
+    <div class="feature-card" style="animation-delay:0.15s">
+      <div class="feature-icon">👥</div>
+      <div class="feature-title">Gestion des acheteurs</div>
+      <div class="feature-desc">Gérer la liste des habitants inscrits à l'épicerie solidaire.</div>
+    </div>
+  </div>
+  <div class="overview-grid" style="display:none">
+    <div class="reveal">
+      <div class="context-card">
+        <h4>Contexte</h4>
+        <p>La commune de <strong style="color:var(--white)">Getcet-sur-Mer</strong> dispose d'une épicerie solidaire pour les habitants à faibles revenus. L'application permet de gérer les commerces partenaires et les acheteurs inscrits.</p>
+      </div>
+      <div class="context-card">
+        <h4>Organisation</h4>
+        <p>Le site est développé en PHP avec une architecture MVC. Les pages s'affichent dynamiquement selon le rôle de l'employé connecté.</p>
+      </div>
+      <div class="context-card">
+        <h4>Accès sécurisé</h4>
+        <p>Chaque employé se connecte avec son identifiant. Selon son rôle, il accède à des fonctionnalités différentes. Les pages non autorisées sont bloquées.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CODE ─── -->
+<section id="code">
+  <div class="section-label">Code Source</div>
+  <div class="section-title">Extraits clés</div>
+  <div class="divider"></div>
+  <div class="code-grid">
+
+    <!-- index.php -->
+    <div class="code-block reveal">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+        <span class="code-filename">index.php — Front Controller</span>
+      </div>
+      <div class="code-body">
+<pre><span class="kw">&lt;?php</span>
+<span class="fn">session_start</span>();
+<span class="kw">require_once</span>(<span class="str">"include/fonctions.php"</span>);
+<span class="kw">require_once</span>(<span class="str">"include/modele.php"</span>);
+
+<span class="var">$pdo</span> = <span class="typ">Modele</span>::<span class="fn">getModele</span>();
+<span class="var">$estConnecte</span> = <span class="fn">estConnecte</span>();
+
+<span class="kw">if</span>(!<span class="fn">isset</span>(<span class="var">$_REQUEST</span>[<span class="str">'uc'</span>]) || !<span class="var">$estConnecte</span>){
+    <span class="var">$_REQUEST</span>[<span class="str">'uc'</span>] = <span class="str">'connexion'</span>;
+}
+
+<span class="kw">switch</span>(<span class="var">$_REQUEST</span>[<span class="str">'uc'</span>]){
+    <span class="kw">case</span> <span class="str">'listeCommerces'</span>:
+        <span class="kw">if</span>(<span class="var">$_SESSION</span>[<span class="str">'role'</span>] == <span class="str">'Secrétaire'</span>)
+            <span class="kw">include</span>(<span class="str">"controleurs/c_gererCommerces.php"</span>);
+        <span class="kw">else</span>
+            <span class="fn">echo</span> <span class="str">"Accès non autorisé."</span>;
+        <span class="kw">break</span>;
+    <span class="kw">case</span> <span class="str">'deconnexion'</span>:
+        <span class="fn">deconnecter</span>();
+        <span class="fn">header</span>(<span class="str">"Location: index.php"</span>);
+        <span class="kw">exit</span>();
+}</pre>
+      </div>
+    </div>
+
+    <!-- modele.php -->
+    <div class="code-block reveal reveal-d1">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+        <span class="code-filename">include/modele.php — Singleton PDO</span>
+      </div>
+      <div class="code-body">
+<pre><span class="kw">class</span> <span class="typ">Modele</span> {
+    <span class="kw">private static</span> <span class="var">$serveur</span> = <span class="str">'mysql:host=localhost'</span>;
+    <span class="kw">private static</span> <span class="var">$bdd</span>     = <span class="str">'dbname=getcet'</span>;
+    <span class="kw">private static</span> <span class="var">$monModele</span> = <span class="kw">null</span>;
+
+    <span class="kw">public static function</span> <span class="fn">getModele</span>() {
+        <span class="kw">if</span>(<span class="typ">Modele</span>::<span class="var">$monModele</span> == <span class="kw">null</span>)
+            <span class="typ">Modele</span>::<span class="var">$monModele</span> = <span class="kw">new</span> <span class="typ">Modele</span>();
+        <span class="kw">return</span> <span class="typ">Modele</span>::<span class="var">$monModele</span>;
+    }
+
+    <span class="kw">public function</span> <span class="fn">creerNouveauFoyerEtAcheteur</span>(
+        <span class="var">$nom</span>, <span class="var">$prenom</span>, <span class="var">$dateNaiss</span>,
+        <span class="var">$mail</span>, <span class="var">$tel</span>, <span class="var">$rue</span>, <span class="var">$cp</span>, <span class="var">$ville</span>
+    ) {
+        <span class="cmt">// 1. Créer le foyer</span>
+        <span class="var">$req</span> = <span class="str">"INSERT INTO foyer (rue, codePostal, ville,
+            dateInstallation, justificatifsValides)
+            VALUES ('$rue','$cp','$ville',NOW(),1)"</span>;
+        <span class="typ">Modele</span>::<span class="var">$monPdo</span>-&gt;<span class="fn">exec</span>(<span class="var">$req</span>);
+        <span class="var">$idFoyer</span> = <span class="typ">Modele</span>::<span class="var">$monPdo</span>-&gt;<span class="fn">lastInsertId</span>();
+        <span class="cmt">// 2. Créer l'habitant puis l'acheteur...</span>
+    }
+}</pre>
+      </div>
+    </div>
+
+    <!-- c_gererCommerces.php -->
+    <div class="code-block reveal reveal-d2">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+        <span class="code-filename">controleurs/c_gererCommerces.php</span>
+      </div>
+      <div class="code-body">
+<pre><span class="kw">&lt;?php</span>
+<span class="kw">include</span>(<span class="str">"vues/v_sommaire.php"</span>);
+<span class="var">$action</span> = <span class="var">$_REQUEST</span>[<span class="str">'action'</span>];
+
+<span class="kw">switch</span>(<span class="var">$action</span>) {
+    <span class="kw">case</span> <span class="str">'gererCommerces'</span>:
+        <span class="var">$lesCommerces</span> = <span class="var">$pdo</span>-&gt;<span class="fn">getLesCommerces</span>();
+        <span class="kw">include</span>(<span class="str">"vues/v_listeCommerces.php"</span>);
+        <span class="kw">include</span>(<span class="str">"vues/v_ajoutCommerce.php"</span>);
+        <span class="kw">break</span>;
+
+    <span class="kw">case</span> <span class="str">'ajouterUnCommerce'</span>:
+        <span class="var">$nom</span>   = <span class="var">$_REQUEST</span>[<span class="str">'nom'</span>];
+        <span class="var">$rue</span>   = <span class="var">$_REQUEST</span>[<span class="str">'rue'</span>];
+        <span class="var">$cp</span>    = <span class="var">$_REQUEST</span>[<span class="str">'cp'</span>];
+        <span class="var">$ville</span> = <span class="var">$_REQUEST</span>[<span class="str">'ville'</span>];
+        <span class="var">$pdo</span>-&gt;<span class="fn">ajouterUnCommerce</span>(<span class="var">$nom</span>,<span class="var">$rue</span>,<span class="var">$cp</span>,<span class="var">$ville</span>);
+        <span class="var">$lesCommerces</span> = <span class="var">$pdo</span>-&gt;<span class="fn">getLesCommerces</span>();
+        <span class="kw">include</span>(<span class="str">"vues/v_listeCommerces.php"</span>);
+        <span class="kw">break</span>;
+
+    <span class="kw">case</span> <span class="str">'supprimerCommerce'</span>:
+        <span class="var">$pdo</span>-&gt;<span class="fn">supprimerCommerce</span>(<span class="var">$_REQUEST</span>[<span class="str">'id'</span>]);
+        <span class="var">$lesCommerces</span> = <span class="var">$pdo</span>-&gt;<span class="fn">getLesCommerces</span>();
+        <span class="kw">include</span>(<span class="str">"vues/v_listeCommerces.php"</span>);
+        <span class="kw">break</span>;
+}</pre>
+      </div>
+    </div>
+
+    <!-- getcet.sql extrait -->
+    <div class="code-block reveal reveal-d3">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+        <span class="code-filename">Sql/getcet.sql — Extrait schéma</span>
+      </div>
+      <div class="code-body">
+<pre><span class="cmt">-- Table commerce</span>
+<span class="kw">CREATE TABLE</span> <span class="typ">commerce</span> (
+    id         <span class="typ">int</span> <span class="kw">NOT NULL AUTO_INCREMENT</span>,
+    nom        <span class="typ">varchar</span>(<span class="num">50</span>),
+    rue        <span class="typ">varchar</span>(<span class="num">100</span>),
+    codePostal <span class="typ">VARCHAR</span>(<span class="num">5</span>),
+    ville      <span class="typ">varchar</span>(<span class="num">50</span>),
+    <span class="kw">PRIMARY KEY</span> (id)
+) <span class="kw">ENGINE</span>=InnoDB;
+
+<span class="cmt">-- Table acheteur</span>
+<span class="kw">CREATE TABLE</span> <span class="typ">acheteur</span> (
+    id         <span class="typ">int</span> <span class="kw">NOT NULL AUTO_INCREMENT</span>,
+    idHabitant <span class="typ">int</span> <span class="kw">NOT NULL</span>,
+    idFoyer    <span class="typ">int</span> <span class="kw">NOT NULL</span>,
+    <span class="kw">PRIMARY KEY</span> (id),
+    <span class="kw">FOREIGN KEY</span> (idHabitant, idFoyer)
+        <span class="kw">REFERENCES</span> <span class="typ">habitant</span>(idHabitant, idFoyer)
+) <span class="kw">ENGINE</span>=InnoDB;
+
+<span class="cmt">-- Table vendre (prix solidaire)</span>
+<span class="kw">CREATE TABLE</span> <span class="typ">vendre</span> (
+    idCommerce    <span class="typ">int</span>,
+    refProduit    <span class="typ">varchar</span>(<span class="num">5</span>),
+    prixOrigine   <span class="typ">DECIMAL</span>(<span class="num">5</span>,<span class="num">2</span>),
+    prixSolidaire <span class="typ">DECIMAL</span>(<span class="num">5</span>,<span class="num">2</span>),
+    <span class="kw">PRIMARY KEY</span> (idCommerce, refProduit, dateJour)
+);</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <p>© 2025 Tiago Gonçalves Dias — Epi-Solidaire PHP/MySQL</p>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

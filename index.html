@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tiago Gonçalves Dias — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #080c14;
+      --bg2: #0d1220;
+      --card: rgba(255,255,255,0.04);
+      --card-border: rgba(255,255,255,0.08);
+      --accent: #6c63ff;
+      --accent2: #00d2ff;
+      --accent3: #a855f7;
+      --text: #e8eaf6;
+      --muted: #8892a4;
+      --white: #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ─── Scrollbar ─── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+
+    /* ─── Background animated gradient ─── */
+    .bg-glow {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 20%, rgba(108,99,255,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 80% 80%, rgba(0,210,255,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 60% 10%, rgba(168,85,247,0.07) 0%, transparent 70%);
+    }
+
+    /* ─── Nav ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 6%;
+      backdrop-filter: blur(20px);
+      background: rgba(8,12,20,0.7);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      transition: background 0.3s;
+    }
+
+    .nav-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; font-size: 1.3rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted); font-size: 0.9rem; font-weight: 500;
+      text-decoration: none; transition: color 0.2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 2px; background: var(--accent);
+      transform: scaleX(0); transform-origin: left; transition: transform 0.3s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    /* ─── Hero ─── */
+    #hero {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 0 6%;
+    }
+
+    .hero-content { max-width: 700px; }
+
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(108,99,255,0.12); border: 1px solid rgba(108,99,255,0.3);
+      color: var(--accent); font-size: 0.8rem; font-weight: 600;
+      padding: 0.4rem 1rem; border-radius: 100px;
+      margin-bottom: 2rem; letter-spacing: 0.05em;
+    }
+    .hero-tag .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.4); }
+    }
+
+    .hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      font-weight: 700; line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+    .hero-title .name {
+      background: linear-gradient(135deg, var(--white) 0%, var(--accent2) 50%, var(--accent) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-title .line2 { color: var(--muted); font-weight: 400; font-size: 0.7em; display: block; margin-top: 0.3rem; }
+
+    .hero-desc {
+      color: var(--muted); font-size: 1.1rem; line-height: 1.8;
+      max-width: 520px; margin-bottom: 2.5rem;
+    }
+
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.85rem 2rem; border-radius: 12px;
+      font-size: 0.9rem; font-weight: 600; text-decoration: none;
+      transition: all 0.25s; cursor: pointer; border: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent3));
+      color: #fff;
+      box-shadow: 0 0 30px rgba(108,99,255,0.3);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 50px rgba(108,99,255,0.5); }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text);
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+    /* Floating shapes */
+    .shapes { position: absolute; right: 5%; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 1rem; }
+    .shape-card {
+      background: var(--card); border: 1px solid var(--card-border);
+      backdrop-filter: blur(10px);
+      border-radius: 16px; padding: 1.2rem 1.5rem;
+      min-width: 200px;
+      animation: float 4s ease-in-out infinite;
+    }
+    .shape-card:nth-child(2) { animation-delay: -1.5s; margin-left: 2rem; }
+    .shape-card:nth-child(3) { animation-delay: -3s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .sc-label { font-size: 0.7rem; color: var(--muted); margin-bottom: 0.4rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
+    .sc-val { font-size: 1rem; font-weight: 700; color: var(--white); }
+    .sc-bar { margin-top: 0.6rem; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.08); overflow: hidden; }
+    .sc-bar-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+
+    /* ─── Sections ─── */
+    section { position: relative; z-index: 1; padding: 7rem 6%; }
+    .section-label {
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 0.8rem;
+    }
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700; color: var(--white);
+      margin-bottom: 1rem;
+    }
+    .section-sub { color: var(--muted); font-size: 1rem; line-height: 1.7; max-width: 580px; margin-bottom: 3.5rem; }
+
+    .divider { width: 40px; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 2px; margin-bottom: 3rem; }
+
+    /* ─── About ─── */
+    #about .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 3rem; align-items: center;
+    }
+    .about-text p { color: var(--muted); font-size: 1rem; line-height: 1.8; margin-bottom: 1rem; }
+
+    .info-list { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1.5rem; }
+    .info-list li {
+      display: flex; align-items: center; gap: 0.8rem;
+      color: var(--muted); font-size: 0.9rem;
+    }
+    .info-list li strong { color: var(--text); }
+    .info-list .icon { font-size: 1rem; width: 1.5rem; }
+
+    .about-cards { display: flex; flex-direction: column; gap: 1rem; }
+    .about-card {
+      background: var(--card); border: 1px solid var(--card-border);
+      border-radius: 16px; padding: 1.5rem;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .about-card:hover { border-color: rgba(108,99,255,0.4); transform: translateX(4px); }
+    .about-card-icon { font-size: 1.5rem; margin-bottom: 0.6rem; }
+    .about-card h4 { font-size: 0.95rem; font-weight: 600; color: var(--white); margin-bottom: 0.3rem; }
+    .about-card p { font-size: 0.85rem; color: var(--muted); }
+
+    /* ─── Skills ─── */
+    #skills { background: var(--bg2); }
+    .skills-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 1rem;
+    }
+    .skill-card {
+      background: var(--card); border: 1px solid var(--card-border);
+      border-radius: 16px; padding: 1.5rem 1rem;
+      text-align: center;
+      transition: all 0.3s;
+      cursor: default;
+    }
+    .skill-card:hover {
+      border-color: rgba(108,99,255,0.5);
+      background: rgba(108,99,255,0.08);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(108,99,255,0.15);
+    }
+    .skill-icon { font-size: 2rem; margin-bottom: 0.8rem; display: block; }
+    .skill-name { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+    .skill-level { font-size: 0.72rem; color: var(--muted); margin-top: 0.3rem; }
+
+    /* ─── Experience ─── */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: ''; position: absolute; left: 0; top: 8px; bottom: 8px;
+      width: 2px; background: linear-gradient(180deg, var(--accent), var(--accent2), transparent);
+      border-radius: 2px;
+    }
+    .timeline-item {
+      position: relative; margin-bottom: 3rem;
+    }
+    .timeline-item::before {
+      content: ''; position: absolute; left: -2.42rem; top: 6px;
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--accent); border: 2px solid var(--bg);
+      box-shadow: 0 0 12px var(--accent);
+    }
+    .timeline-date {
+      font-size: 0.75rem; font-weight: 600; color: var(--accent);
+      letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.5rem;
+    }
+    .timeline-title { font-size: 1.05rem; font-weight: 700; color: var(--white); margin-bottom: 0.3rem; }
+    .timeline-org { font-size: 0.85rem; color: var(--muted); margin-bottom: 0.6rem; }
+    .timeline-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+
+    /* ─── Projects ─── */
+    #projects { background: var(--bg2); }
+    .projects-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+    .project-card {
+      background: var(--card); border: 1px solid var(--card-border);
+      border-radius: 20px; overflow: hidden;
+      transition: all 0.35s;
+      position: relative;
+    }
+    .project-card:hover { transform: translateY(-6px); border-color: rgba(108,99,255,0.4); box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+
+    .project-header {
+      height: 160px; display: flex; align-items: center; justify-content: center;
+      font-size: 4rem; position: relative; overflow: hidden;
+    }
+    .project-header::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 40%, var(--bg2));
+    }
+    .ph-1 { background: linear-gradient(135deg, #1a1040, #2d1b69); }
+    .ph-2 { background: linear-gradient(135deg, #0d2137, #0a4060); }
+
+    .project-body { padding: 1.5rem; }
+    .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .tag {
+      font-size: 0.72rem; font-weight: 600; padding: 0.3rem 0.7rem;
+      border-radius: 100px; border: 1px solid rgba(108,99,255,0.3);
+      color: var(--accent); background: rgba(108,99,255,0.1);
+    }
+    .project-title { font-size: 1.1rem; font-weight: 700; color: var(--white); margin-bottom: 0.5rem; }
+    .project-desc { font-size: 0.87rem; color: var(--muted); line-height: 1.7; }
+    .project-btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      margin-top: 1.2rem;
+      padding: 0.6rem 1.3rem; border-radius: 10px;
+      font-size: 0.82rem; font-weight: 600; text-decoration: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent3));
+      color: #fff; transition: opacity 0.2s, transform 0.2s;
+    }
+    .project-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    /* ─── Contact ─── */
+    #contact {
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+    }
+    .contact-card {
+      background: var(--card); border: 1px solid var(--card-border);
+      border-radius: 24px; padding: 3rem; max-width: 600px; width: 100%;
+      backdrop-filter: blur(10px);
+    }
+    .contact-email {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.2rem; font-weight: 700; color: var(--white);
+      text-decoration: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      display: inline-block; margin: 1.5rem 0;
+    }
+    .contact-links { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 1rem; }
+    .contact-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.7rem 1.4rem; border-radius: 10px;
+      border: 1px solid var(--card-border);
+      color: var(--muted); font-size: 0.87rem; font-weight: 500;
+      text-decoration: none; transition: all 0.25s;
+    }
+    .contact-link:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+    /* ─── Footer ─── */
+    footer {
+      position: relative; z-index: 1;
+      text-align: center; padding: 2rem;
+      border-top: 1px solid var(--card-border);
+      color: var(--muted); font-size: 0.8rem;
+    }
+
+    /* ─── Scroll animation ─── */
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 900px) {
+      .shapes { display: none; }
+      #about .about-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      nav { padding: 1rem 5%; }
+      .nav-links { gap: 1.2rem; }
+      section { padding: 5rem 5%; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <div class="nav-logo">TGD</div>
+  <ul class="nav-links">
+    <li><a href="#about">À propos</a></li>
+    <li><a href="#skills">Compétences</a></li>
+    <li><a href="#experience">Parcours</a></li>
+    <li><a href="#projects">Projets</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section id="hero">
+  <div class="hero-content">
+    <div class="hero-tag">
+      <span class="dot"></span>
+      Disponible — Étudiant BTS SIO
+    </div>
+    <h1 class="hero-title">
+      <span class="name">Tiago Gonçalves<br>Dias</span>
+      <span class="line2">Développeur Web &amp; Systèmes</span>
+    </h1>
+    <p class="hero-desc">
+      Étudiant passionné en BTS SIO (2024–2026), curieux et motivé, spécialisé en développement web, bases de données et systèmes. Je conçois des solutions numériques efficaces et élégantes.
+    </p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn btn-primary">Voir mes projets →</a>
+      <a href="#contact" class="btn btn-outline">Me contacter</a>
+    </div>
+  </div>
+
+  <div class="shapes">
+    <div class="shape-card">
+      <div class="sc-label">Frontend</div>
+      <div class="sc-val">HTML / CSS</div>
+      <div class="sc-bar"><div class="sc-bar-fill" style="width:80%"></div></div>
+    </div>
+    <div class="shape-card">
+      <div class="sc-label">Base de données</div>
+      <div class="sc-val">SQL</div>
+      <div class="sc-bar"><div class="sc-bar-fill" style="width:70%"></div></div>
+    </div>
+    <div class="shape-card">
+      <div class="sc-label">Programmation</div>
+      <div class="sc-val">Java / Python</div>
+      <div class="sc-bar"><div class="sc-bar-fill" style="width:65%"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ABOUT ─── -->
+<section id="about">
+  <div class="section-label">Présentation</div>
+  <div class="section-title">Qui suis-je ?</div>
+  <div class="divider"></div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>Je m'appelle <strong style="color:var(--white)">Tiago Gonçalves Dias</strong>, étudiant en BTS SIO depuis 2024. Après un Bac Pro MELEC (2018–2021), j'ai choisi de me réorienter vers l'informatique, un domaine qui me passionne depuis toujours.</p>
+      <p>Je suis curieux, rigoureux et motivé, avec un fort intérêt pour le développement web, la gestion de bases de données et l'administration système. J'aime apprendre de nouvelles technologies et relever des défis techniques.</p>
+      <ul class="info-list">
+        <li><span class="icon">📍</span> <strong>Localisation</strong> — France</li>
+        <li><span class="icon">🎓</span> <strong>Formation</strong> — BTS SIO 2024–2026</li>
+        <li><span class="icon">✉️</span> <strong>Email</strong> — tiagogoncalvesdias12@gmail.com</li>
+        <li><span class="icon">🎯</span> <strong>Objectif</strong> — Licence MIAGE → Master Informatique</li>
+      </ul>
+    </div>
+    <div class="about-cards">
+      <div class="about-card reveal reveal-delay-1">
+        <div class="about-card-icon">💻</div>
+        <h4>Développement Web</h4>
+        <p>Création de sites et applications web, du design à la mise en ligne.</p>
+      </div>
+      <div class="about-card reveal reveal-delay-2">
+        <div class="about-card-icon">🗄️</div>
+        <h4>Bases de données</h4>
+        <p>Modélisation, requêtes SQL, gestion et optimisation de bases de données.</p>
+      </div>
+      <div class="about-card reveal reveal-delay-3">
+        <div class="about-card-icon">⚙️</div>
+        <h4>Systèmes & Réseaux</h4>
+        <p>Administration de systèmes, scripting et configuration réseau.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SKILLS ─── -->
+<section id="skills">
+  <div class="section-label">Compétences</div>
+  <div class="section-title">Ma stack technique</div>
+  <div class="divider"></div>
+  <div class="skills-grid">
+    <div class="skill-card reveal reveal-delay-1">
+      <span class="skill-icon">🌐</span>
+      <div class="skill-name">HTML</div>
+      <div class="skill-level">Avancé</div>
+    </div>
+    <div class="skill-card reveal reveal-delay-1">
+      <span class="skill-icon">🎨</span>
+      <div class="skill-name">CSS</div>
+      <div class="skill-level">Avancé</div>
+    </div>
+    <div class="skill-card reveal reveal-delay-2">
+      <span class="skill-icon">🗃️</span>
+      <div class="skill-name">SQL</div>
+      <div class="skill-level">Intermédiaire</div>
+    </div>
+    <div class="skill-card reveal reveal-delay-2">
+      <span class="skill-icon">☕</span>
+      <div class="skill-name">Java</div>
+      <div class="skill-level">Intermédiaire</div>
+    </div>
+    <div class="skill-card reveal reveal-delay-3">
+      <span class="skill-icon">🐍</span>
+      <div class="skill-name">Python</div>
+      <div class="skill-level">Intermédiaire</div>
+    </div>
+    <div class="skill-card reveal reveal-delay-3">
+      <span class="skill-icon">🐧</span>
+      <div class="skill-name">Linux</div>
+      <div class="skill-level">Notions</div>
+    </div>
+    <div class="skill-card reveal reveal-delay-4">
+      <span class="skill-icon">🔧</span>
+      <div class="skill-name">Git</div>
+      <div class="skill-level">Notions</div>
+    </div>
+    <div class="skill-card reveal reveal-delay-4">
+      <span class="skill-icon">🌍</span>
+      <div class="skill-name">Réseaux</div>
+      <div class="skill-level">Notions</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── EXPERIENCE / PARCOURS ─── -->
+<section id="experience">
+  <div class="section-label">Parcours</div>
+  <div class="section-title">Formation &amp; Expériences</div>
+  <div class="divider"></div>
+  <div class="timeline">
+    <div class="timeline-item reveal">
+      <div class="timeline-date">2024 — 2026</div>
+      <div class="timeline-title">BTS SIO — Services Informatiques aux Organisations</div>
+      <div class="timeline-org">Formation en cours · Option SLAM</div>
+      <div class="timeline-desc">Développement web, administration système, bases de données, réseaux, cybersécurité. Option SLAM (Solutions Logicielles et Applications Métiers).</div>
+    </div>
+    <div class="timeline-item reveal reveal-delay-1">
+      <div class="timeline-date">12 jan. — 14 fév. 2026</div>
+      <div class="timeline-title">Stage 2ème année — Gestion web, Réseaux sociaux &amp; Réseau</div>
+      <div class="timeline-org">MJC François Rabelais · Stage</div>
+      <div class="timeline-desc">Mise à jour et gestion du site web de l'association, animation des réseaux sociaux et création de contenus numériques. Gestion et maintenance du réseau informatique.</div>
+    </div>
+    <div class="timeline-item reveal reveal-delay-2">
+      <div class="timeline-date">Mai — Juin 2025</div>
+      <div class="timeline-title">Stage 1ère année — Gestion web &amp; Réseaux sociaux</div>
+      <div class="timeline-org">MJC François Rabelais · Stage</div>
+      <div class="timeline-desc">Mise à jour et gestion du site web de l'association. Animation des réseaux sociaux et création de contenus numériques.</div>
+    </div>
+    <div class="timeline-item reveal reveal-delay-3">
+      <div class="timeline-date">2018 — 2021</div>
+      <div class="timeline-title">Bac Pro MELEC — Métiers de l'Électricité et de ses Environnements Connectés</div>
+      <div class="timeline-org">Diplôme obtenu</div>
+      <div class="timeline-desc">Formation technique en électricité, automatisme et systèmes connectés. Développement de la rigueur et des méthodes de travail.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PROJECTS ─── -->
+<section id="projects">
+  <div class="section-label">Réalisations</div>
+  <div class="section-title">Mes projets</div>
+  <div class="divider"></div>
+  <div class="projects-grid">
+    <div class="project-card reveal">
+      <div class="project-header ph-1">🔭</div>
+      <div class="project-body">
+        <div class="project-tags">
+          <span class="tag">Veille technologique</span>
+          <span class="tag">Recherche</span>
+        </div>
+        <div class="project-title">Réalité Virtuelle &amp; Augmentée dans le Sport</div>
+        <div class="project-desc">Étude et analyse des applications de la réalité virtuelle et augmentée dans le domaine sportif. 6 articles analysés, conclusion avantages/inconvénients.</div>
+        <a href="veille.html" class="project-btn">Voir la veille →</a>
+      </div>
+    </div>
+    <div class="project-card reveal reveal-delay-1">
+      <div class="project-header" style="background:linear-gradient(135deg,#0a2a1a,#145a2a)">🛒</div>
+      <div class="project-body">
+        <div class="project-tags">
+          <span class="tag">PHP</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">MVC</span>
+        </div>
+        <div class="project-title">Epi-Solidaire</div>
+        <div class="project-desc">Application web PHP de gestion d'une épicerie solidaire. Authentification par rôle, gestion des commerces, acheteurs et produits. Base de données MySQL relationnelle.</div>
+        <a href="epi_solidaire.html" class="project-btn">Voir le projet →</a>
+      </div>
+    </div>
+    <div class="project-card reveal reveal-delay-2">
+      <div class="project-header ph-2">🦁</div>
+      <div class="project-body">
+        <div class="project-tags">
+          <span class="tag">Java</span>
+          <span class="tag">GUI</span>
+          <span class="tag">POO</span>
+        </div>
+        <div class="project-title">Ménagerie Java</div>
+        <div class="project-desc">Application de bureau développée en Java Swing avec interface graphique. Gestion complète d'animaux : ajout, recherche et suppression. Architecture MVC.</div>
+        <a href="menagerie.html" class="project-btn">Voir le projet →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTACT ─── -->
+<section id="contact">
+  <div class="section-label">Contact</div>
+  <div class="section-title">Travaillons ensemble</div>
+  <div class="divider" style="margin:0 auto 3rem;"></div>
+  <div class="contact-card reveal">
+    <p style="color:var(--muted);font-size:0.95rem;line-height:1.7;">
+      Vous avez un projet, une opportunité de stage ou simplement envie d'échanger ? N'hésitez pas à me contacter, je suis toujours ouvert aux nouvelles collaborations.
+    </p>
+    <a href="mailto:tiagogoncalvesdias12@gmail.com" class="contact-email">tiagogoncalvesdias12@gmail.com</a>
+    <div class="contact-links">
+      <a href="mailto:tiagogoncalvesdias12@gmail.com" class="contact-link">
+        ✉️ Envoyer un email
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <p>© 2025 Tiago Gonçalves Dias — Conçu avec passion</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Nav active link
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.getAttribute('id'); });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'white' : '';
+    });
+  });
+</script>
+</body>
+</html>
