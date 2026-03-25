@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enchère à Porter — Tiago Gonçalves Dias</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #080c14;
+      --bg2: #0d1220;
+      --card: rgba(255,255,255,0.04);
+      --card-border: rgba(255,255,255,0.08);
+      --accent: #6c63ff;
+      --accent2: #00d2ff;
+      --accent3: #a855f7;
+      --purple: #a855f7;
+      --text: #e8eaf6;
+      --muted: #8892a4;
+      --white: #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+
+    .bg-glow {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 20%, rgba(168,85,247,0.1) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 80% 80%, rgba(108,99,255,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 60% 10%, rgba(0,210,255,0.06) 0%, transparent 70%);
+    }
+
+    /* ─── Nav ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 6%;
+      backdrop-filter: blur(20px);
+      background: rgba(8,12,20,0.7);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .nav-logo {
+      font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.3rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+    .nav-back { color: var(--muted); font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: color 0.2s; }
+    .nav-back:hover { color: var(--white); }
+
+    /* ─── Hero ─── */
+    .hero {
+      position: relative; z-index: 1;
+      padding: 9rem 6% 5rem;
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 3rem; align-items: center;
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3);
+      color: var(--purple); font-size: 0.8rem; font-weight: 600;
+      padding: 0.4rem 1rem; border-radius: 100px;
+      margin-bottom: 1.5rem; letter-spacing: 0.05em;
+    }
+    .hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; line-height: 1.15;
+      background: linear-gradient(135deg, var(--white) 0%, var(--purple) 60%, var(--accent2) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+    .hero-sub { color: var(--muted); font-size: 1rem; line-height: 1.7; max-width: 540px; margin-bottom: 2rem; }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.8rem 1.8rem; border-radius: 12px;
+      font-size: 0.88rem; font-weight: 600; text-decoration: none; transition: all 0.25s;
+    }
+    .btn-primary { background: linear-gradient(135deg, var(--purple), var(--accent)); color: #fff; font-weight: 700; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(168,85,247,0.4); }
+    .btn-outline { border: 1px solid var(--card-border); color: var(--text); }
+    .btn-outline:hover { border-color: var(--purple); color: var(--purple); transform: translateY(-2px); }
+
+    .hero-badges { display: flex; flex-direction: column; gap: 0.8rem; }
+    .badge {
+      background: var(--card); border: 1px solid var(--card-border);
+      border-radius: 12px; padding: 0.8rem 1.2rem;
+      display: flex; align-items: center; gap: 0.7rem;
+      font-size: 0.85rem; font-weight: 600; color: var(--text);
+      white-space: nowrap;
+      opacity: 0; animation: fadeIn 0.5s ease forwards;
+    }
+    .badge:nth-child(1){animation-delay:0.1s} .badge:nth-child(2){animation-delay:0.2s}
+    .badge:nth-child(3){animation-delay:0.3s} .badge:nth-child(4){animation-delay:0.4s}
+    .badge:nth-child(5){animation-delay:0.5s}
+    @keyframes fadeIn { to { opacity: 1; } }
+    .bdot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ─── Sections ─── */
+    section { position: relative; z-index: 1; padding: 5rem 6%; }
+    .section-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--purple); margin-bottom: 0.6rem; }
+    .section-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.6rem, 3vw, 2.3rem); font-weight: 700; color: var(--white); margin-bottom: 0.8rem; }
+    .section-sub { color: var(--muted); font-size: 0.95rem; line-height: 1.7; max-width: 650px; margin-bottom: 2.5rem; }
+    .divider { width: 40px; height: 3px; background: linear-gradient(90deg, var(--purple), var(--accent2)); border-radius: 2px; margin-bottom: 2.5rem; }
+
+    /* ─── Rôles ─── */
+    #roles { background: var(--bg2); }
+    .roles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.2rem; }
+    .role-card {
+      background: var(--card); border: 1px solid var(--card-border);
+      border-radius: 18px; padding: 1.6rem;
+      transition: all 0.3s;
+      opacity: 0; transform: translateY(20px);
+      animation: fadeUp 0.5s ease forwards;
+    }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    .role-card:hover { border-color: rgba(168,85,247,0.35); transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+    .role-icon { font-size: 2rem; margin-bottom: 0.9rem; }
+    .role-name { font-size: 0.95rem; font-weight: 700; color: var(--purple); margin-bottom: 0.3rem; }
+    .role-member { font-size: 0.78rem; color: var(--accent2); font-weight: 600; margin-bottom: 0.7rem; }
+    .role-perms { display: flex; flex-direction: column; gap: 0.35rem; }
+    .perm { font-size: 0.8rem; color: var(--muted); display: flex; align-items: flex-start; gap: 0.45rem; line-height: 1.4; }
+    .perm::before { content: '✓'; color: var(--purple); font-weight: 700; flex-shrink: 0; }
+
+    /* ─── Fonctionnalités ─── */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.2rem; }
+    .feature-card {
+      background: var(--card); border: 1px solid var(--card-border);
+      border-radius: 18px; padding: 1.5rem; transition: all 0.3s;
+      opacity: 0; transform: translateY(20px); animation: fadeUp 0.5s ease forwards;
+    }
+    .feature-card:hover { border-color: rgba(168,85,247,0.35); transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.3); }
+    .feature-icon { font-size: 1.8rem; margin-bottom: 0.9rem; }
+    .feature-title { font-size: 0.92rem; font-weight: 700; color: var(--white); margin-bottom: 0.4rem; }
+    .feature-desc  { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+    /* ─── Architecture ─── */
+    #archi { background: var(--bg2); }
+    .arch-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .arch-group h4 { font-size: 0.8rem; font-weight: 700; color: var(--purple); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.9rem; }
+    .arch-list { display: flex; flex-direction: column; gap: 0.6rem; }
+    .arch-item {
+      background: var(--card); border: 1px solid var(--card-border);
+      border-radius: 12px; padding: 0.8rem 1rem;
+      display: flex; align-items: center; gap: 0.8rem;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .arch-item:hover { border-color: rgba(168,85,247,0.35); transform: translateX(4px); }
+    .arch-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 600; color: var(--accent2); background: rgba(0,210,255,0.08); border-radius: 6px; padding: 0.2rem 0.55rem; flex-shrink: 0; }
+    .arch-desc { font-size: 0.8rem; color: var(--muted); }
+
+    /* ─── BDD ─── */
+    .db-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.8rem; }
+    .db-table {
+      background: var(--card); border: 1px solid var(--card-border);
+      border-radius: 12px; padding: 1rem; transition: all 0.25s;
+    }
+    .db-table:hover { border-color: rgba(168,85,247,0.35); }
+    .db-name { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; font-weight: 600; color: var(--purple); margin-bottom: 0.5rem; }
+    .db-cols { list-style: none; display: flex; flex-direction: column; gap: 0.2rem; }
+    .db-cols li { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--muted); }
+    .db-cols .pk { color: var(--accent2); }
+    .db-cols .fk { color: var(--accent3); }
+
+    /* ─── Code ─── */
+    #code { background: var(--bg2); }
+    .code-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .code-block { background: #0a0e1a; border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; overflow: hidden; }
+    .code-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.9rem 1.2rem; background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .code-dots { display: flex; gap: 6px; }
+    .code-dots span { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r{background:#ff5f57} .dot-y{background:#ffbd2e} .dot-g{background:#28ca41}
+    .code-filename { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--muted); }
+    .code-body { padding: 1.3rem; overflow-x: auto; }
+    pre { font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; line-height: 1.75; color: #c9d1d9; }
+    .kw  { color: #ff7b72; }
+    .typ { color: #79c0ff; }
+    .str { color: #a5d6ff; }
+    .cmt { color: #8b949e; font-style: italic; }
+    .fn  { color: #d2a8ff; }
+    .num { color: #f2cc60; }
+    .var { color: #ffa657; }
+
+    /* ─── Reveal ─── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.1s; } .reveal-d2 { transition-delay: 0.2s; } .reveal-d3 { transition-delay: 0.3s; }
+
+    /* ─── Footer ─── */
+    footer { position: relative; z-index: 1; text-align: center; padding: 2rem; border-top: 1px solid var(--card-border); color: var(--muted); font-size: 0.8rem; }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-badges { flex-direction: row; flex-wrap: wrap; }
+      .arch-cols { grid-template-columns: 1fr; }
+      .code-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <a href="index.html" class="nav-logo">TGD</a>
+  <a href="index.html#projects" class="nav-back">← Retour au portfolio</a>
+</nav>
+
+<!-- ─── HERO ─── -->
+<div class="hero" style="position:relative;z-index:1;">
+  <div>
+    <div class="hero-tag">BTS SIO SLAM 2024–2026 · Projet équipe</div>
+    <h1 class="hero-title">Enchère à Porter</h1>
+    <p class="hero-sub">
+      Plateforme web de ventes aux enchères de vêtements pour la Mairie de Getcet-sur-Mer. Développée en équipe avec CodeIgniter 4, architecture MVC, MySQL et fonctionnalités avancées (QR codes, emails, statistiques).
+    </p>
+    <div class="hero-btns">
+      <a href="#roles" class="btn btn-primary">Voir les rôles</a>
+      <a href="#code" class="btn btn-outline">Code source</a>
+    </div>
+  </div>
+  <div class="hero-badges">
+    <div class="badge"><span class="bdot" style="background:#a855f7"></span>CodeIgniter 4</div>
+    <div class="badge"><span class="bdot" style="background:#79c0ff"></span>PHP 8</div>
+    <div class="badge"><span class="bdot" style="background:#00d2ff"></span>MySQL</div>
+    <div class="badge"><span class="bdot" style="background:#6c63ff"></span>Architecture MVC</div>
+    <div class="badge"><span class="bdot" style="background:#f2cc60"></span>Projet d'équipe</div>
+  </div>
+</div>
+
+<!-- ─── RÔLES ─── -->
+<section id="roles">
+  <div class="section-label">Accès par rôle</div>
+  <div class="section-title">3 profils utilisateurs</div>
+  <div class="divider"></div>
+  <p class="section-sub">Chaque utilisateur se connecte et accède à un espace dédié. Les routes sont protégées par un filtre de session personnalisé <code style="color:var(--accent2);font-family:'JetBrains Mono',monospace;font-size:0.85em;">FiltreConnexion</code>.</p>
+  <div class="roles-grid">
+    <div class="role-card" style="animation-delay:0.05s">
+      <div class="role-icon">🗂️</div>
+      <div class="role-name">Secrétaire</div>
+      <div class="role-member">Développé par Tiago</div>
+      <div class="role-perms">
+        <div class="perm">Créer et gérer des ventes</div>
+        <div class="perm">Ajouter des vêtements à l'inventaire</div>
+        <div class="perm">Générer des QR codes pour les ventes</div>
+        <div class="perm">Envoyer des emails groupés aux inscrits</div>
+        <div class="perm">Consulter les statistiques globales</div>
+        <div class="perm">Voir participants, enchères et gagnants</div>
+      </div>
+    </div>
+    <div class="role-card" style="animation-delay:0.1s">
+      <div class="role-icon">🤝</div>
+      <div class="role-name">Bénévole</div>
+      <div class="role-member">Développé par Danie</div>
+      <div class="role-perms">
+        <div class="perm">Consulter le stock libre (non affecté)</div>
+        <div class="perm">Affecter des vêtements à une vente</div>
+        <div class="perm">Voir les résultats des ventes clôturées</div>
+      </div>
+    </div>
+    <div class="role-card" style="animation-delay:0.15s">
+      <div class="role-icon">🏠</div>
+      <div class="role-name">Habitant</div>
+      <div class="role-member">Développé par Ousmane</div>
+      <div class="role-perms">
+        <div class="perm">S'inscrire à des ventes à venir</div>
+        <div class="perm">Enchérir sur les articles disponibles</div>
+        <div class="perm">Annuler sa propre enchère</div>
+        <div class="perm">Confirmer un achat après clôture</div>
+        <div class="perm">Historique de ses enchères et victoires</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FONCTIONNALITÉS ─── -->
+<section id="features" style="background:var(--bg2);">
+  <div class="section-label">Fonctionnalités</div>
+  <div class="section-title">Ce que fait l'application</div>
+  <div class="divider"></div>
+  <div class="features-grid">
+    <div class="feature-card" style="animation-delay:0.05s">
+      <div class="feature-icon">🔐</div>
+      <div class="feature-title">Authentification sécurisée</div>
+      <div class="feature-desc">Connexion par email / mot de passe hashé (bcrypt). Filtre de session protégeant toutes les routes privées. Redirection automatique selon le rôle.</div>
+    </div>
+    <div class="feature-card" style="animation-delay:0.1s">
+      <div class="feature-icon">🏷️</div>
+      <div class="feature-title">Enchères en temps réel</div>
+      <div class="feature-desc">Règle de mise : montant minimum = enchère la plus haute + 0,10 €, ou 0,20 € si aucune enchère. Validation côté serveur pour éviter la triche.</div>
+    </div>
+    <div class="feature-card" style="animation-delay:0.15s">
+      <div class="feature-icon">📊</div>
+      <div class="feature-title">Statistiques</div>
+      <div class="feature-desc">Tableau de bord secrétaire : nombre de ventes, enchères totales, acheteurs actifs, articles les plus populaires.</div>
+    </div>
+    <div class="feature-card" style="animation-delay:0.2s">
+      <div class="feature-icon">📱</div>
+      <div class="feature-title">Génération de QR codes</div>
+      <div class="feature-desc">La secrétaire peut générer un QR code pour chaque vente afin de partager facilement son URL.</div>
+    </div>
+    <div class="feature-card" style="animation-delay:0.25s">
+      <div class="feature-icon">✉️</div>
+      <div class="feature-title">Emails groupés</div>
+      <div class="feature-desc">Envoi automatique d'emails aux inscrits : ouverture de vente, rappel, annonce des résultats et gagnants.</div>
+    </div>
+    <div class="feature-card" style="animation-delay:0.3s">
+      <div class="feature-icon">📄</div>
+      <div class="feature-title">Export PDF</div>
+      <div class="feature-desc">Export PDF d'une vente complète avec la liste des participants, enchères et résultats finaux.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ARCHITECTURE ─── -->
+<section id="archi">
+  <div class="section-label">Architecture MVC</div>
+  <div class="section-title">Structure du projet</div>
+  <div class="divider"></div>
+  <div class="arch-cols reveal">
+    <div class="arch-group">
+      <h4>Contrôleurs (7)</h4>
+      <div class="arch-list">
+        <div class="arch-item"><span class="arch-badge">Ctrl</span><span class="arch-desc">ControleurConnexion — Login / logout</span></div>
+        <div class="arch-item"><span class="arch-badge">Ctrl</span><span class="arch-desc">Inscription — Création de compte</span></div>
+        <div class="arch-item"><span class="arch-badge">Ctrl</span><span class="arch-desc">Profil — Modification du profil</span></div>
+        <div class="arch-item"><span class="arch-badge">Ctrl</span><span class="arch-desc">Habitant — Enchères, inscriptions</span></div>
+        <div class="arch-item"><span class="arch-badge">Ctrl</span><span class="arch-desc">Benevole — Stock, affectation</span></div>
+        <div class="arch-item"><span class="arch-badge">Ctrl</span><span class="arch-desc">Secretaire — Ventes, stats, QR, emails</span></div>
+        <div class="arch-item"><span class="arch-badge">Ctrl</span><span class="arch-desc">Home — Routage de base</span></div>
+      </div>
+    </div>
+    <div class="arch-group">
+      <h4>Modèles (5)</h4>
+      <div class="arch-list">
+        <div class="arch-item"><span class="arch-badge">Mdl</span><span class="arch-desc">ModeleUtilisateur — Auth, rôles</span></div>
+        <div class="arch-item"><span class="arch-badge">Mdl</span><span class="arch-desc">ModeleVente — CRUD ventes, statuts</span></div>
+        <div class="arch-item"><span class="arch-badge">Mdl</span><span class="arch-desc">ModeleVetement — Gestion vêtements</span></div>
+        <div class="arch-item"><span class="arch-badge">Mdl</span><span class="arch-desc">ModeleEnchere — Enchères, gagnants</span></div>
+        <div class="arch-item"><span class="arch-badge">Mdl</span><span class="arch-desc">ModeleInscriptionVente — Inscriptions</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── BASE DE DONNÉES ─── -->
+<section style="background:var(--bg2);">
+  <div class="section-label">Base de données</div>
+  <div class="section-title">Schéma MySQL</div>
+  <div class="divider"></div>
+  <div class="db-grid reveal">
+    <div class="db-table">
+      <div class="db-name">utilisateur</div>
+      <ul class="db-cols">
+        <li class="pk">id_user (PK)</li>
+        <li>email</li>
+        <li>mdp (bcrypt)</li>
+        <li>nom, prenom</li>
+        <li class="fk">id_role (FK)</li>
+      </ul>
+    </div>
+    <div class="db-table">
+      <div class="db-name">vente</div>
+      <ul class="db-cols">
+        <li class="pk">id_vente (PK)</li>
+        <li>nom_vente</li>
+        <li>date_debut</li>
+        <li>date_fin</li>
+      </ul>
+    </div>
+    <div class="db-table">
+      <div class="db-name">vetement</div>
+      <ul class="db-cols">
+        <li class="pk">id_vetement (PK)</li>
+        <li>nom, description</li>
+        <li>prix_origine</li>
+        <li class="fk">id_vente (FK)</li>
+      </ul>
+    </div>
+    <div class="db-table">
+      <div class="db-name">enchere</div>
+      <ul class="db-cols">
+        <li class="pk">id_enchere (PK)</li>
+        <li class="fk">id_vetement (FK)</li>
+        <li>montant</li>
+        <li class="fk">id_user (FK)</li>
+        <li>date_heure, confirme</li>
+      </ul>
+    </div>
+    <div class="db-table">
+      <div class="db-name">inscription_vente</div>
+      <ul class="db-cols">
+        <li class="pk">id_inscription (PK)</li>
+        <li class="fk">id_user (FK)</li>
+        <li class="fk">id_vente (FK)</li>
+        <li>date_inscription</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CODE ─── -->
+<section id="code">
+  <div class="section-label">Code Source</div>
+  <div class="section-title">Extraits clés</div>
+  <div class="divider"></div>
+  <div class="code-grid">
+
+    <div class="code-block reveal">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+        <span class="code-filename">Controllers/Secretaire.php</span>
+      </div>
+      <div class="code-body">
+<pre><span class="kw">class</span> <span class="typ">Secretaire</span> <span class="kw">extends</span> <span class="typ">BaseController</span>
+{
+    <span class="kw">public function</span> <span class="fn">index</span>()
+    {
+        <span class="var">$modVente</span> = <span class="kw">new</span> <span class="typ">ModeleVente</span>();
+        <span class="var">$donnees</span>[<span class="str">'lesVentes'</span>] =
+            <span class="var">$modVente</span>-&gt;<span class="fn">getLesVentes</span>();
+
+        <span class="fn">echo</span> <span class="fn">view</span>(<span class="str">'header'</span>);
+        <span class="fn">echo</span> <span class="fn">view</span>(<span class="str">'vue_secretaire'</span>, <span class="var">$donnees</span>);
+        <span class="fn">echo</span> <span class="fn">view</span>(<span class="str">'footer'</span>);
+    }
+
+    <span class="kw">public function</span> <span class="fn">creer_vente</span>()
+    {
+        <span class="var">$modVente</span> = <span class="kw">new</span> <span class="typ">ModeleVente</span>();
+        <span class="var">$nomVente</span>   = <span class="var">$this</span>-&gt;request-&gt;<span class="fn">getPost</span>(<span class="str">'nom'</span>);
+        <span class="var">$dateDebut</span>  = <span class="var">$this</span>-&gt;request-&gt;<span class="fn">getPost</span>(<span class="str">'debut'</span>);
+        <span class="var">$dateFin</span>    = <span class="var">$this</span>-&gt;request-&gt;<span class="fn">getPost</span>(<span class="str">'fin'</span>);
+
+        <span class="var">$modVente</span>-&gt;<span class="fn">creerVente</span>(
+            <span class="var">$nomVente</span>, <span class="var">$dateDebut</span>, <span class="var">$dateFin</span>
+        );
+        <span class="kw">return</span> <span class="fn">redirect</span>()-&gt;<span class="fn">to</span>(<span class="str">'/secretaire'</span>);
+    }
+}</pre>
+      </div>
+    </div>
+
+    <div class="code-block reveal reveal-d1">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+        <span class="code-filename">Controllers/Habitant.php — miser()</span>
+      </div>
+      <div class="code-body">
+<pre><span class="kw">public function</span> <span class="fn">miser</span>()
+{
+    <span class="var">$modEnchere</span>  = <span class="kw">new</span> <span class="typ">ModeleEnchere</span>();
+    <span class="var">$idVetement</span> = <span class="var">$this</span>-&gt;request-&gt;<span class="fn">getPost</span>(<span class="str">'id_vetement'</span>);
+    <span class="var">$montant</span>    = <span class="var">$this</span>-&gt;request-&gt;<span class="fn">getPost</span>(<span class="str">'montant'</span>);
+    <span class="var">$idUser</span>     = <span class="fn">session</span>()-&gt;<span class="fn">get</span>(<span class="str">'id_user'</span>);
+
+    <span class="cmt">// Calcul montant minimum requis</span>
+    <span class="var">$best</span> = <span class="var">$modEnchere</span>-&gt;<span class="fn">getPrixMax</span>(<span class="var">$idVetement</span>);
+    <span class="var">$min</span>  = <span class="var">$best</span>
+        ? <span class="var">$best</span>[<span class="str">'montant'</span>] + <span class="num">0.10</span>
+        : <span class="num">0.20</span>;
+
+    <span class="kw">if</span> (<span class="var">$montant</span> &lt; <span class="var">$min</span>) {
+        <span class="kw">return</span> <span class="fn">redirect</span>()-&gt;<span class="fn">back</span>()
+            -&gt;<span class="fn">with</span>(<span class="str">'error'</span>, <span class="str">'Montant trop bas'</span>);
+    }
+
+    <span class="var">$modEnchere</span>-&gt;<span class="fn">ajouterEnchere</span>(
+        <span class="var">$idVetement</span>, <span class="var">$montant</span>, <span class="var">$idUser</span>
+    );
+    <span class="kw">return</span> <span class="fn">redirect</span>()-&gt;<span class="fn">to</span>(<span class="str">'/habitant'</span>);
+}</pre>
+      </div>
+    </div>
+
+    <div class="code-block reveal reveal-d2">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+        <span class="code-filename">setup_tables.sql — Extrait schéma</span>
+      </div>
+      <div class="code-body">
+<pre><span class="kw">CREATE TABLE</span> <span class="typ">enchere</span> (
+  id_enchere  <span class="typ">INT</span> <span class="kw">AUTO_INCREMENT PRIMARY KEY</span>,
+  id_vetement <span class="typ">INT</span> <span class="kw">NOT NULL</span>,
+  montant     <span class="typ">DECIMAL</span>(<span class="num">8</span>,<span class="num">2</span>) <span class="kw">NOT NULL</span>,
+  id_user     <span class="typ">INT</span> <span class="kw">NOT NULL</span>,
+  date_heure  <span class="typ">DATETIME</span> <span class="kw">DEFAULT</span> <span class="fn">NOW</span>(),
+  confirme    <span class="typ">TINYINT</span> <span class="kw">DEFAULT</span> <span class="num">0</span>,
+  <span class="kw">FOREIGN KEY</span> (id_vetement)
+    <span class="kw">REFERENCES</span> <span class="typ">vetement</span>(id_vetement),
+  <span class="kw">FOREIGN KEY</span> (id_user)
+    <span class="kw">REFERENCES</span> <span class="typ">utilisateur</span>(id_user)
+) <span class="kw">ENGINE</span>=InnoDB;
+
+<span class="cmt">-- Requête préparée (sécurité anti-injection)</span>
+<span class="var">$this</span>-&gt;<span class="fn">db</span>-&gt;<span class="fn">query</span>(
+  <span class="str">"INSERT INTO enchere
+   (id_vetement, montant, id_user)
+   VALUES (?, ?, ?)"</span>,
+  [<span class="var">$idVetement</span>, <span class="var">$montant</span>, <span class="var">$idUser</span>]
+);</pre>
+      </div>
+    </div>
+
+    <div class="code-block reveal reveal-d3">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+        <span class="code-filename">Filters/FiltreConnexion.php</span>
+      </div>
+      <div class="code-body">
+<pre><span class="kw">class</span> <span class="typ">FiltreConnexion</span> <span class="kw">implements</span> <span class="typ">FilterInterface</span>
+{
+    <span class="kw">public function</span> <span class="fn">before</span>(<span class="var">$request</span>, <span class="var">$args</span> = <span class="kw">null</span>)
+    {
+        <span class="cmt">// Vérifie si l'utilisateur est connecté</span>
+        <span class="kw">if</span> (!<span class="fn">session</span>()-&gt;<span class="fn">get</span>(<span class="str">'connecte'</span>)) {
+            <span class="kw">return</span> <span class="fn">redirect</span>()-&gt;<span class="fn">to</span>(<span class="str">'/'</span>);
+        }
+
+        <span class="cmt">// Vérifie le rôle si spécifié en argument</span>
+        <span class="kw">if</span> (!<span class="fn">empty</span>(<span class="var">$args</span>)) {
+            <span class="var">$role</span> = <span class="fn">session</span>()-&gt;<span class="fn">get</span>(<span class="str">'id_role'</span>);
+            <span class="kw">if</span> (!<span class="fn">in_array</span>(<span class="var">$role</span>, <span class="var">$args</span>)) {
+                <span class="kw">return</span> <span class="fn">redirect</span>()-&gt;<span class="fn">to</span>(<span class="str">'/'</span>);
+            }
+        }
+    }
+}</pre>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <p>© 2026 Tiago Gonçalves Dias — Enchère à Porter · CodeIgniter 4 / MySQL</p>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
